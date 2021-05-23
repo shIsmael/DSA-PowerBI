@@ -11,6 +11,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Data Cleaning
 
+![](data_clean1.png)
+
+### Remover espaços extras dos valores
+
 Para remover espaços no final dos dados de uma coluna, basta selecionar a coluna e em seguida ir em format e selecionar trim, para remover espaços desncessários entre as palavras, basta usar a opção clean. Se ainda assim permanecerem espaços entre as palavras, basta clicar com o botao direito em cima da coluna e e replavc values
 
-![](data_clean1.png)
+### Capitalizar palavras 
+
+Para fazer com que todas as letras dos valores do tipo string comecem com letra maiúscula, basta ir na ferramenta format dentro do power query e  selecionar Capitalize Each Word
+
+### Remover linhas em branco
+
+Basta ir em Home > Remove Rows > Remove Blank Rows
+
+### Dividir coluna
+
+Pode acontecer da coluna ter mais de uma informação, para dividir essa coluna em outras colunas, basta clicar com botão direito na coluna e em split.
