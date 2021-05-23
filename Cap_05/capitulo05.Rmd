@@ -28,3 +28,17 @@ Basta ir em Home > Remove Rows > Remove Blank Rows
 ### Dividir coluna
 
 Pode acontecer da coluna ter mais de uma informação, para dividir essa coluna em outras colunas, basta clicar com botão direito na coluna e em split.
+
+### Mudar tipo com virgula
+
+Para mudar o tipo de dado para valores com vírgula, basta clicar com botão direito na coluna, selecionar change type e em seguida using locale.
+
+### Preencher Linhas com valores faltantes
+
+![](fill_mv.PNG)
+
+Se a linha estiver sema nada escrito, primeiramente deve-se usar a função replace para preencher com "null" e em seguida fill>down or up. Caso já tenha valores, basta usar fill>up or down
+
+### Forecast
+
+Podemos fazer previsão de séries temporais, basta utilizar gráfico de linhas e ir na lupinha (Analytics) e selecionar forecast. Vale ressaltar, que devemos ter um dado variando ao longo do tempo para realizar essa operação.
