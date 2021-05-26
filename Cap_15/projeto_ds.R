@@ -132,8 +132,58 @@ cm_v1
 
 # Corrigindo o problema de desbalanceamento dos dados
 
-install.packages("imbalance")
-library(imbalance)
+install.packages("ROSE")
 
-table(dados_treino$)
-??newMWMOTE
+library("ROSE")
+
+
+table(dados_treino$inadimplente)
+dados_treinobal <- ovun.sample(inadimplente ~ ., data = dados_treino, method = "over",
+                             N = 34568)$data
+table(dados_treinobal$inadimplente)
+
+
+# Criando a  segunda versão do modelo
+
+modelo_v2 <- randomForest(inadimplente ~ ., data = dados_treinobal)
+modelo_v2
+
+previsoes_v2 <- predict(modelo_v2, dados_teste)
+cm_v2 <- caret::confusionMatrix(previsoes_v2, dados_teste$inadimplente, positive='1')
+cm_v2
+
+# Plotando as variáveis mais importantes
+
+varImpPlot(modelo_v2)
+
+# Obtendo as variáveis mais importantes
+imp_var <- importance(modelo_v2)
+varImportance <- data.frame(Variables = row.names(imp_var), 
+                            Importance = round(imp_var[ ,'MeanDecreaseGini'],2))
+
+# Criando o rank de variáveis baseado na importância
+
+rankImportance <- varImportance %>% 
+  mutate(Rank = paste0('#', dense_rank(desc(Importance))))
+
+# Usando ggplot2 para visualizar a importância relativa das variáveis
+ggplot(rankImportance, 
+       aes(x = reorder(Variables, Importance), 
+           y = Importance, 
+           fill = Importance)) + 
+  geom_bar(stat='identity') + 
+  geom_text(aes(x = Variables, y = 0.5, label = Rank), 
+            hjust = 0, 
+            vjust = 0.55, 
+            size = 4, 
+            colour = 'red') +
+  labs(x = 'Variables') +
+  coord_flip() 
+
+# Poderiamos remover variáveis com pouca importância
+
+saveRDS(modelo_v2, file="modelo_v3.rds")
+
+
+# Carregando o modelo
+modelo_final <- readRDS("modelo_v2.rds")
