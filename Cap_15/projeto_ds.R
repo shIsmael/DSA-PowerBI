@@ -129,3 +129,11 @@ previsoes_v1 <- predict(modelo_v1, dados_teste)
 
 cm_v1 <- caret::confusionMatrix(previsoes_v1, dados_teste$inadimplente, positive='1')
 cm_v1
+
+# Corrigindo o problema de desbalanceamento dos dados
+
+install.packages("imbalance")
+library(imbalance)
+
+table(dados_treino$)
+??newMWMOTE
