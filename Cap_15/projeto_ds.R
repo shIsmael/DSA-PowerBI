@@ -77,3 +77,55 @@ dados_clientes$Estado_Civil <- cut(dados_clientes$Estado_Civil, c(-1,0,1,2,3),
 summary(dados_clientes$Estado_Civil)
 
 
+# Convertendo a variavel idade para o tipo fator com faixa etaria
+
+str(dados_clientes$Idade)
+
+dados_clientes$Idade <- cut(dados_clientes$Idade, c(0,30,50,100), 
+                            labels = c("Jovem", "Adulto", "Idoso"))
+str(dados_clientes$Idade)
+
+# Convertendo a variavel que indica pagamentos para o tipo fator
+
+dados_clientes$PAY_0 <- as.factor(dados_clientes$PAY_0)
+dados_clientes$PAY_2 <- as.factor(dados_clientes$PAY_2)
+dados_clientes$PAY_3 <- as.factor(dados_clientes$PAY_3)
+dados_clientes$PAY_4 <- as.factor(dados_clientes$PAY_4)
+dados_clientes$PAY_5 <- as.factor(dados_clientes$PAY_5)
+dados_clientes$PAY_6 <- as.factor(dados_clientes$PAY_6)
+
+# Verificando valores faltantes
+str(dados_clientes)
+sapply(dados_clientes, function(x) sum(is.na(x)))
+missmap(dados_clientes, main="Valores faltantes observados")
+dados_clientes <-  na.omit(dados_clientes)
+missmap(dados_clientes, main="Valores faltantes observados")
+dim(dados_clientes)
+
+# COnvertendo a variável dependente para o tipo categorico
+
+dados_clientes$inadimplente <- as.factor(dados_clientes$inadimplente)
+
+# Verificando o balanceamento da variável target
+
+tb <- table(dados_clientes$inadimplente)
+prop.table(tb)
+
+# Separando em treino e teste
+
+indice <- createDataPartition(dados_clientes$inadimplente, p=.75, list=F)
+dados_treino <- dados_clientes[indice,]
+dados_teste <- dados_clientes[-indice,]
+
+prop.table(table(dados_treino$inadimplente))
+
+# Criando o modelo
+
+modelo_v1 <- randomForest(inadimplente ~ ., data = dados_treino)
+
+previsoes_v1 <- predict(modelo_v1, dados_teste)
+
+# matriz de confusão
+
+cm_v1 <- caret::confusionMatrix(previsoes_v1, dados_teste$inadimplente, positive='1')
+cm_v1
